@@ -1,0 +1,15 @@
+import uuid
+from sqlalchemy import Boolean, Column, String, DateTime
+from datetime import datetime
+from .db import Base
+
+class Task(Base):
+    __tablename__ = "tasks"
+
+    id: Column = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()), nullable=False)
+    title: Column = Column(String, nullable=False)
+    description: Column = Column(String, nullable=True)
+    completed: Column = Column(Boolean, default=False, nullable=False)
+    created_at: Column = Column(DateTime, default=datetime.utcnow)
+
+    

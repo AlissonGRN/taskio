@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import Boolean, Column, String, DateTime
 from datetime import datetime
-from .db import Base
+from ..db import Base
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -11,5 +11,5 @@ class Task(Base):
     description: Column = Column(String, nullable=True)
     completed: Column = Column(Boolean, default=False, nullable=False)
     created_at: Column = Column(DateTime, default=datetime.utcnow)
-
+    
     

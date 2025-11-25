@@ -7,7 +7,7 @@ class TaskBase(BaseModel):
     description: str | None = None
 
 class TaskCreate(TaskBase):
-    """Schema usado na criação — herda de TaskBase para garantir `title` obrigatório."""
+    pass
 
 
 class TaskUpdate(BaseModel):
@@ -21,5 +21,7 @@ class TaskRead(BaseModel):
     description: str | None = None
     completed: bool
     created_at: datetime
+    completed_at: datetime | None = None
+    owner_id: uuid.UUID
     model_config = ConfigDict(from_attributes=True)
 

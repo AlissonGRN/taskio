@@ -3,6 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from . import crud, models, schemas
 from ..db import get_async_session
 from . import models
+from ..users.auth import current_active_user 
+from ..users.models import User
 
 router = APIRouter(
     prefix="/tasks",  
@@ -11,41 +13,53 @@ router = APIRouter(
 
 async def get_task_or_404(
     task_id: str, 
-    db: AsyncSession = Depends(get_async_session)
+    db: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_active_user)
 ) -> models.Task:
     db_task = await crud.get_task_by_id(db, task_id)
     if db_task is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Task not found")
+
+    if db_task.owner_id != user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, 
+            detail="Not authorized to access this task"
+        )
+        
     return db_task
 
 
 @router.post("/", response_model=schemas.TaskRead, status_code=status.HTTP_201_CREATED)
 async def create_new_task(
     task: schemas.TaskCreate,
-    db: AsyncSession = Depends(get_async_session)
+    db: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_active_user)
 ):
-    return await crud.create_task(db=db, task=task)
+    return await crud.create_task(db=db, task=task, user_id=user.id)
 
 
 @router.get("/", response_model=list[schemas.TaskRead])
 async def read_tasks(
-    db: AsyncSession = Depends(get_async_session)
+    db: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_active_user),
 ):
-    return await crud.get_tasks(db=db)
+    return await crud.get_tasks(db=db, user_id=user.id)
 
 
 @router.get("/done", response_model=list[schemas.TaskRead])
 async def read_completed_tasks(
-    db: AsyncSession = Depends(get_async_session)
+    db: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_active_user),
 ):
-    return await crud.get_tasks(db=db, completed=True)
+    return await crud.get_tasks(db=db, user_id=user.id, completed=True)
 
 
 @router.get("/pending", response_model=list[schemas.TaskRead])
 async def read_pending_tasks(
-    db: AsyncSession = Depends(get_async_session)
+    db: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_active_user),
 ):
-    return await crud.get_tasks(db=db, completed=False)
+    return await crud.get_tasks(db=db, user_id=user.id, completed=False)
 
 
 @router.post("/complete/{task_id}", response_model=schemas.TaskRead)
@@ -58,7 +72,7 @@ async def mark_task_complete(
 
 @router.put("/update/{task_id}", response_model=schemas.TaskRead)
 async def update_existing_task(
-    task_in: schemas.TaskUpdate, # Usa o schema de update
+    task_in: schemas.TaskUpdate,
     db_task: models.Task = Depends(get_task_or_404),
     db: AsyncSession = Depends(get_async_session)
 ):

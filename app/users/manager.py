@@ -2,9 +2,8 @@ import uuid
 from typing import Optional
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, UUIDIDMixin
-from fastapi_users.db import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from ..db import get_async_session
 from .models import User
 

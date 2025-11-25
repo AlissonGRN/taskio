@@ -1,11 +1,17 @@
 import uuid
+from typing import Optional
+from datetime import datetime
 from fastapi_users import schemas
 
 class UserRead(schemas.BaseUser[uuid.UUID]):
-    pass
+    first_name: Optional[str]
+    last_name: Optional[str]
+    created_at: datetime
 
 class UserCreate(schemas.BaseUserCreate):
-    pass
+    first_name: Optional[str]
+    last_name: Optional[str]
 
 class UserUpdate(schemas.BaseUserUpdate):
-    pass
+    first_name: Optional[str]
+    last_name: Optional[str]

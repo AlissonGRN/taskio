@@ -5,10 +5,11 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from fastapi import Depends
 from datetime import datetime
+from .config import get_settings
 
+settings = get_settings()
 
-
-DATABASE_URL = "sqlite+aiosqlite:///./tasks.db"
+DATABASE_URL = settings.DATABASE_URL
 
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)

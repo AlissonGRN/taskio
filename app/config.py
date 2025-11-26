@@ -8,6 +8,6 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", extras="ignore")
 
-setting = Settings()
+settings = Settings()
 
 

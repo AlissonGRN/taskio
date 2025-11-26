@@ -16,8 +16,9 @@ API RESTful de gerenciamento de tarefas com autenticação de usuários.
 
 ### Autenticação e Usuários
 - **Registro de Usuários**: Crie novas contas com validação de email
-- **Autenticação JWT**: Login com token Bearer JWT (validade: 1 hora)
+- **Autenticação JWT**: Login com token Bearer JWT
 - **Gerenciamento de Usuários**: Obtenha dados do usuário autenticado
+- **Gerenciamento de Senhas**: Hashing com Argon2 para segurança
 
 ### Características Técnicas
 - **Assíncrono**: Todos os endpoints utilizam async/await, evitando bloqueios
@@ -27,37 +28,44 @@ API RESTful de gerenciamento de tarefas com autenticação de usuários.
 
 ## 🛠️ Stack de Tecnologias
 
-- **FastAPI**: Framework web de alta performance
-- **Pydantic**: Validação de dados e serialização
-- **SQLAlchemy (Async)**: ORM assíncrono
-- **FastAPI-Users**: Sistema de autenticação e gerenciamento de usuários
+- **FastAPI**: Framework web de alta performance com validação automática
+- **Pydantic**: Validação de dados, serialização e gerenciamento de configurações
+- **SQLAlchemy (Async)**: ORM assíncrono com suporte a múltiplos bancos
+- **FastAPI-Users**: Sistema completo de autenticação e autorização
 - **Aiosqlite**: Driver SQLite assíncrono
-- **Uvicorn**: Servidor ASGI
+- **Uvicorn**: Servidor ASGI de alta performance
+- **Python-dotenv**: Gerenciamento seguro de variáveis de ambiente
+- **Argon2-CFI**: Hash de senhas com Argon2
 
 ## 📂 Estrutura do Projeto
 
 ```
 app/
+├── __init__.py
 ├── app.py                 # Aplicação FastAPI com lifespan
-├── db.py                  # Configuração do banco de dados
+├── config.py              # Configuração centralizada (variáveis de ambiente)
+├── db.py                  # Configuração do banco de dados SQLAlchemy
 ├── models.py              # Modelo de dados (Tasks)
 ├── schemas.py             # Schemas de validação (Pydantic)
-├── crud.py                # Operações de banco de dados (CRUD)
+├── crud.py                # Operações CRUD de tarefas
 ├── routers/
-│   ├── __init__.py
-│   └── tasks.py           # Endpoints de tarefas
+│   └── __init__.py
 ├── tasks/
-│   ├── models.py
-│   ├── schemas.py
-│   ├── crud.py
-│   └── router.py
+│   ├── __init__.py
+│   ├── models.py          # Modelo de tarefa (Task)
+│   ├── schemas.py         # Schemas de tarefa (TaskCreate, TaskRead, TaskUpdate)
+│   ├── crud.py            # Operações CRUD de tarefas
+│   └── router.py          # Endpoints de tarefas
 └── users/
+    ├── __init__.py
     ├── models.py          # Modelo de usuário
-    ├── schemas.py         # Schemas de usuário
+    ├── schemas.py         # Schemas de usuário (UserRead, UserCreate, UserUpdate)
     ├── manager.py         # Gerenciador de usuários
-    ├── auth.py            # Configuração JWT
-    └── router.py          # Endpoints de autenticação
-main.py                     # Ponto de entrada
+    ├── auth.py            # Configuração JWT e autenticação
+    └── router.py          # Endpoints de autenticação e usuários
+main.py                     # Ponto de entrada da aplicação
+.env                        # Variáveis de ambiente (não versionado)
+.env.example                # Template de variáveis de ambiente
 tasks.db                    # Banco de dados SQLite (auto-criado)
 ```
 
@@ -95,10 +103,6 @@ A API estará disponível em `http://localhost:8000`
 
 ## 📚 Uso da API
 
-### Documentação Interativa
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-
 ### Endpoints Principais
 
 #### Tarefas
@@ -110,32 +114,21 @@ A API estará disponível em `http://localhost:8000`
 - `POST /tasks/complete/{task_id}` - Marcar como concluída
 - `DELETE /tasks/delete/{task_id}` - Deletar tarefa
 
-#### Autenticação (quando implementado)
+#### Autenticação
 - `POST /auth/register` - Registrar novo usuário
-- `POST /auth/jwt/login` - Fazer login
-- `GET /auth/me` - Obter dados do usuário autenticado
-
-### Exemplo de Requisição
-
-Criar uma tarefa:
-```bash
-curl -X POST "http://localhost:8000/tasks/" \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Minha tarefa", "description": "Descrição da tarefa"}'
-```
-
-Listar tarefas:
-```bash
-curl -X GET "http://localhost:8000/tasks/"
-```
+- `POST /auth/jwt/login` - Fazer login com JWT
+- `POST /auth/jwt/logout` - Fazer logout
+- `GET /users/me` - Obter dados do usuário autenticado
+- `PATCH /users/{id}` - Atualizar dados do usuário
 
 ## ⚠️ Notas Importantes
 
-- O campo `title` é **obrigatório** ao criar uma tarefa
-- Todas as operações de banco de dados são assíncronas
-- O banco de dados é criado automaticamente no primeiro startup
-- O token JWT é válido por 1 hora
-- Altere a `SECRET` em `app/users/auth.py` para uma chave segura em produção
+- O campo `title` é obrigatório ao criar uma tarefa
+- Todos os endpoints de tarefas requerem autenticação JWT
+- O banco de dados é criado automaticamente no startup
+- Senhas são armazenadas com hash Argon2
+- Configure uma `SECRET_KEY` segura no arquivo `.env` para produção
+- O arquivo `.env` não é versionado (use `.env.example` como referência)
 
 ## 📝 Licença
 

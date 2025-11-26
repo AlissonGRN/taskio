@@ -40,7 +40,7 @@ async def update_task(db: AsyncSession, db_task: models.Task, task_in: schemas.T
 
 async def complete_task(db: AsyncSession, db_task: models.Task) -> models.Task:
     db_task.completed = True
-    db_task.completed_at = datetime.utcnow()
+    db_task.completed_at = datetime.datetime.utcnow()
     await db.commit()
     await db.refresh(db_task)
     return db_task

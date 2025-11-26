@@ -130,6 +130,19 @@ A API estará disponível em `http://localhost:8000`
 - Configure uma `SECRET_KEY` segura no arquivo `.env` para produção
 - O arquivo `.env` não é versionado (use `.env.example` como referência)
 
+## 🗺️ Roadmap - Melhorias Futuras
+
+- [ ] **Paginação**: Adicionar paginação aos endpoints de listagem de tarefas
+- [ ] **Filtros Avançados**: Filtros por data de criação, prioridade, tags e busca por texto
+- [ ] **Testes Automatizados**: Suite de testes unitários e de integração com pytest
+- [ ] **Migração para PostgreSQL**: Suporte a banco de dados mais robusto
+- [ ] **Docker**: Adicionar Dockerfile e docker-compose para facilitar deployment
+- [ ] **Atribuição de Tarefas**: Permitir atribuir tarefas a outros usuários
+- [ ] **Categorias/Projetos**: Organizar tarefas em projetos ou categorias
+- [ ] **Notificações**: Sistema de notificações para tarefas atribuídas
+- [ ] **Rate Limiting**: Implementar rate limiting nos endpoints
+- [ ] **Cache**: Adicionar cache de resultados com Redis
+
 ## 📝 Licença
 
 MIT

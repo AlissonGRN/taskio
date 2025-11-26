@@ -25,3 +25,11 @@ class TaskRead(BaseModel):
     owner_id: uuid.UUID
     model_config = ConfigDict(from_attributes=True)
 
+class TaskPagination(BaseModel):
+    items: list[TaskRead]
+    total: int
+    page: int
+    size: int
+    pages: int
+
+    

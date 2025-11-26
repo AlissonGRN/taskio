@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from . import crud, models, schemas
 from ..db import get_async_session
@@ -38,12 +38,21 @@ async def create_new_task(
     return await crud.create_task(db=db, task=task, user_id=user.id)
 
 
-@router.get("/", response_model=list[schemas.TaskRead])
+@router.get("/", response_model=schemas.TaskPagination)
 async def read_tasks(
+    completed: bool | None,
+    page: int = Query(1, ge=1, description="Page number"),  
+    size: int = Query(10, ge=1, le=100, description="Number of items per page"),
     db: AsyncSession = Depends(get_async_session),
     user: User = Depends(current_active_user),
 ):
-    return await crud.get_tasks(db=db, user_id=user.id)
+    return await crud.get_tasks(
+        db=db,
+        user_id=user.id,
+        completed=completed,
+        page=page,
+        size=size
+    )
 
 
 @router.get("/done", response_model=list[schemas.TaskRead])

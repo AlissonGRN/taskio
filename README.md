@@ -86,13 +86,7 @@ source venv/bin/activate  # No Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Configure as variáveis de ambiente:
-```bash
-cp .env.example .env
-```
-Edite o arquivo `.env` com suas configurações (SECRET_KEY, DATABASE_URL, etc.)
-
-5. Execute a aplicação:
+4. Execute a aplicação:
 ```bash
 python main.py
 ```
@@ -141,8 +135,7 @@ curl -X GET "http://localhost:8000/tasks/"
 - Todas as operações de banco de dados são assíncronas
 - O banco de dados é criado automaticamente no primeiro startup
 - O token JWT é válido por 1 hora
-- Configure a `SECRET_KEY` no arquivo `.env` — use uma chave segura em produção
-- O arquivo `.env` não é versionado (incluído em `.gitignore`), use `.env.example` como referência
+- Altere a `SECRET` em `app/users/auth.py` para uma chave segura em produção
 
 ## 📝 Licença
 

@@ -20,12 +20,20 @@ async_session_maker_test = async_sessionmaker(
 )
 
 @pytest.fixture
+async def prepare_database():
+    async with engine_test.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    yield
+    async with engine_test.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+
+@pytest.fixture
 async def session(prepare_database) -> AsyncGenerator[AsyncSession, None]:
     async with async_session_maker_test() as session:
         yield session
 
 @pytest.fixture
-async def client() -> AsyncGenerator[AsyncClient, None]:
+async def client(session) -> AsyncGenerator[AsyncClient, None]:
     
     app.dependency_overrides[get_async_session] = lambda: session
 

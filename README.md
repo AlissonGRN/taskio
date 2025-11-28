@@ -20,6 +20,7 @@ TaskIO é uma aplicação backend desenvolvida com **FastAPI** que oferece geren
 - ✅ **Testes Automatizados**: Suite com pytest e pytest-asyncio
 - ✅ **Banco Assíncrono**: SQLAlchemy async pronto para produção
 - ✅ **Configuração Segura**: Variáveis de ambiente com Pydantic Settings
+ - ✅ **Migrações de Banco**: Alembic para versionamento de esquema
 
 ---
 
@@ -50,6 +51,7 @@ TaskIO é uma aplicação backend desenvolvida com **FastAPI** que oferece geren
 - **Argon2-CFI** - Hash de senhas
 - **pytest** - Testes automatizados
 - **Uvicorn** - Servidor ASGI
+ - **Alembic** - Gerenciamento de migrações do banco de dados
 
 ---
 
@@ -96,7 +98,16 @@ cp .env-exemple .env
 # Edite .env com SECRET_KEY e DATABASE_URL
 ```
 
-5. Execute a aplicação:
+5. Execute as migrações do banco de dados (Alembic):
+```bash
+# Atualizar o schema para a versão mais recente
+alembic upgrade head
+
+# (opcional) Para criar uma nova migration após mudanças nas models:
+alembic revision --autogenerate -m "describe changes"
+```
+
+6. Execute a aplicação:
 ```bash
 python main.py
 ```

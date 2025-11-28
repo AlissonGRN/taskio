@@ -1,81 +1,77 @@
 # TaskIO
 
-API RESTful de gerenciamento de tarefas com autenticação de usuários.
+[🇬🇧 English](README.en.md) | 🇧🇷 Português
 
-## 🚀 Principais Funcionalidades
+API RESTful assíncrona para gerenciamento de tarefas com autenticação JWT e controle de acesso.
+
+## 📋 Descrição
+
+TaskIO é uma aplicação backend desenvolvida com **FastAPI** que oferece gerenciamento completo de tarefas, autenticação de usuários com JWT, paginação e testes automatizados. O projeto demonstra boas práticas de desenvolvimento moderno em Python.
+
+**Acesse:** [Swagger UI](http://localhost:8000/docs) • [ReDoc](http://localhost:8000/redoc)
+
+---
+
+## ✨ Destaques do Projeto
+
+- ✅ **Autenticação JWT**: Sistema seguro com Argon2 para hash de senhas
+- ✅ **Controle de Acesso**: Cada usuário gerencia apenas suas tarefas
+- ✅ **Paginação**: Listagem com page/size e metadata completa
+- ✅ **Testes Automatizados**: Suite com pytest e pytest-asyncio
+- ✅ **Banco Assíncrono**: SQLAlchemy async pronto para produção
+- ✅ **Configuração Segura**: Variáveis de ambiente com Pydantic Settings
+
+---
+
+## 🚀 Funcionalidades
 
 ### Gerenciamento de Tarefas
-- **Criação de Tarefas**: Adicione novas tarefas com título (obrigatório) e descrição.
-- **Listagem e Filtragem**: 
-  - Liste todas as tarefas
-  - Filtre apenas tarefas pendentes
-  - Filtre apenas tarefas concluídas
-- **Gestão de Status**: Marque tarefas como concluídas
-- **Atualização**: Atualize título, descrição ou status de qualquer tarefa
-- **Remoção**: Delete tarefas que não são mais necessárias
+- Criar, listar, atualizar e deletar tarefas
+- Filtrar por status (pendentes/concluídas)
+- Paginação com page/size
+- Timestamps de criação e conclusão
+- Controle de acesso por usuário
 
 ### Autenticação e Usuários
-- **Registro de Usuários**: Crie novas contas com validação de email
-- **Autenticação JWT**: Login com token Bearer JWT
-- **Gerenciamento de Usuários**: Obtenha dados do usuário autenticado
-- **Gerenciamento de Senhas**: Hashing com Argon2 para segurança
+- Registro com validação de email
+- Login com JWT (1 hora de expiração)
+- Visualizar e atualizar perfil
+- Senhas com Argon2-CFI
 
-### Características Técnicas
-- **Assíncrono**: Todos os endpoints utilizam async/await, evitando bloqueios
-- **Validação Robusta**: Pydantic garante dados válidos em requisições
-- **Documentação Automática**: Swagger UI e ReDoc disponíveis automaticamente
-- **Banco de Dados Automático**: Tabelas criadas automaticamente no startup
+---
 
-## 🛠️ Stack de Tecnologias
+## 🛠️ Tecnologias
 
-- **FastAPI**: Framework web de alta performance com validação automática
-- **Pydantic**: Validação de dados, serialização e gerenciamento de configurações
-- **SQLAlchemy (Async)**: ORM assíncrono com suporte a múltiplos bancos
-- **FastAPI-Users**: Sistema completo de autenticação e autorização
-- **Aiosqlite**: Driver SQLite assíncrono
-- **Uvicorn**: Servidor ASGI de alta performance
-- **Python-dotenv**: Gerenciamento seguro de variáveis de ambiente
-- **Argon2-CFI**: Hash de senhas com Argon2
+- **FastAPI** - Framework web de alta performance
+- **Pydantic v2** - Validação e configuração
+- **SQLAlchemy (Async)** - ORM assíncrono
+- **Aiosqlite** - Driver SQLite assíncrono
+- **FastAPI-Users** - Autenticação e gerenciamento de usuários
+- **Argon2-CFI** - Hash de senhas
+- **pytest** - Testes automatizados
+- **Uvicorn** - Servidor ASGI
+
+---
 
 ## 📂 Estrutura do Projeto
 
-```
-app/
-├── __init__.py
-├── app.py                 # Aplicação FastAPI com lifespan
-├── config.py              # Configuração centralizada (variáveis de ambiente)
-├── db.py                  # Configuração do banco de dados SQLAlchemy
-├── models.py              # Modelo de dados (Tasks)
-├── schemas.py             # Schemas de validação (Pydantic)
-├── crud.py                # Operações CRUD de tarefas
-├── routers/
-│   └── __init__.py
-├── tasks/
-│   ├── __init__.py
-│   ├── models.py          # Modelo de tarefa (Task)
-│   ├── schemas.py         # Schemas de tarefa (TaskCreate, TaskRead, TaskUpdate)
-│   ├── crud.py            # Operações CRUD de tarefas
-│   └── router.py          # Endpoints de tarefas
-└── users/
-    ├── __init__.py
-    ├── models.py          # Modelo de usuário
-    ├── schemas.py         # Schemas de usuário (UserRead, UserCreate, UserUpdate)
-    ├── manager.py         # Gerenciador de usuários
-    ├── auth.py            # Configuração JWT e autenticação
-    └── router.py          # Endpoints de autenticação e usuários
-main.py                     # Ponto de entrada da aplicação
-.env                        # Variáveis de ambiente (não versionado)
-.env.example                # Template de variáveis de ambiente
-tasks.db                    # Banco de dados SQLite (auto-criado)
-```
+O projeto segue uma arquitetura em camadas com separação clara de responsabilidades:
+
+- **app/**: Aplicação principal com módulos de tarefas e autenticação
+- **tests/**: Suite de testes automatizados com pytest
+- **main.py**: Ponto de entrada da aplicação
+- **.env-exemple**: Template de configuração
+- **requirements.txt**: Dependências do projeto
+
+---
 
 ## 🔧 Instalação e Setup
 
 ### Pré-requisitos
 - Python 3.11+
-- pip ou poetry
+- pip
 
-### Instalação
+### Passos
 
 1. Clone o repositório:
 ```bash
@@ -83,10 +79,10 @@ git clone https://github.com/AlissonGRN/taskio.git
 cd taskio
 ```
 
-2. Crie e ative um ambiente virtual:
+2. Crie um ambiente virtual:
 ```bash
 python -m venv venv
-source venv/bin/activate  # No Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
 ```
 
 3. Instale as dependências:
@@ -94,55 +90,75 @@ source venv/bin/activate  # No Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Execute a aplicação:
+4. Configure as variáveis de ambiente:
+```bash
+cp .env-exemple .env
+# Edite .env com SECRET_KEY e DATABASE_URL
+```
+
+5. Execute a aplicação:
 ```bash
 python main.py
 ```
 
 A API estará disponível em `http://localhost:8000`
 
-## 📚 Uso da API
+---
 
-### Endpoints Principais
+## 📚 Endpoints
 
-#### Tarefas
-- `POST /tasks/` - Criar nova tarefa
-- `GET /tasks/` - Listar todas as tarefas
-- `GET /tasks/pending` - Listar tarefas pendentes
-- `GET /tasks/done` - Listar tarefas concluídas
-- `PUT /tasks/update/{task_id}` - Atualizar tarefa
-- `POST /tasks/complete/{task_id}` - Marcar como concluída
-- `DELETE /tasks/delete/{task_id}` - Deletar tarefa
-
-#### Autenticação
+### Autenticação (Público)
 - `POST /auth/register` - Registrar novo usuário
-- `POST /auth/jwt/login` - Fazer login com JWT
+- `POST /auth/jwt/login` - Fazer login (retorna JWT)
 - `POST /auth/jwt/logout` - Fazer logout
-- `GET /users/me` - Obter dados do usuário autenticado
-- `PATCH /users/{id}` - Atualizar dados do usuário
 
-## ⚠️ Notas Importantes
+### Tarefas (Requer autenticação)
+- `POST /tasks/` - Criar tarefa
+- `GET /tasks/` - Listar com paginação
+- `GET /tasks/pending` - Listar pendentes
+- `GET /tasks/done` - Listar concluídas
+- `PUT /tasks/update/{id}` - Atualizar
+- `POST /tasks/complete/{id}` - Marcar concluída
+- `DELETE /tasks/delete/{id}` - Deletar
 
-- O campo `title` é obrigatório ao criar uma tarefa
-- Todos os endpoints de tarefas requerem autenticação JWT
-- O banco de dados é criado automaticamente no startup
-- Senhas são armazenadas com hash Argon2
-- Configure uma `SECRET_KEY` segura no arquivo `.env` para produção
-- O arquivo `.env` não é versionado (use `.env.example` como referência)
+### Usuário (Requer autenticação)
+- `GET /users/me` - Obter dados do usuário
+- `PATCH /users/{id}` - Atualizar usuário
 
-## 🗺️ Roadmap - Melhorias Futuras
+---
 
-- [ ] **Paginação**: Adicionar paginação aos endpoints de listagem de tarefas
-- [ ] **Filtros Avançados**: Filtros por data de criação, prioridade, tags e busca por texto
-- [ ] **Testes Automatizados**: Suite de testes unitários e de integração com pytest
-- [ ] **Migração para PostgreSQL**: Suporte a banco de dados mais robusto
-- [ ] **Docker**: Adicionar Dockerfile e docker-compose para facilitar deployment
-- [ ] **Atribuição de Tarefas**: Permitir atribuir tarefas a outros usuários
-- [ ] **Categorias/Projetos**: Organizar tarefas em projetos ou categorias
-- [ ] **Notificações**: Sistema de notificações para tarefas atribuídas
-- [ ] **Rate Limiting**: Implementar rate limiting nos endpoints
-- [ ] **Cache**: Adicionar cache de resultados com Redis
+## 🧪 Testes
 
-## 📝 Licença
+```bash
+# Executar todos os testes
+pytest
 
-MIT
+# Com output verboso
+pytest -v
+
+# Com cobertura
+pytest --cov=app tests/
+```
+
+Os testes utilizam banco de dados em memória para isolamento.
+
+---
+
+## 📊 Roadmap
+
+- ✅ Autenticação JWT
+- ✅ CRUD de tarefas com controle de acesso
+- ✅ Paginação
+- ✅ Testes automatizados
+- ✅ Configuração com .env
+- 📋 Migração para PostgreSQL
+- 🐳 Docker + docker-compose
+- 🔄 Refresh tokens
+- 📧 Notificações por email
+- 🏷️ Tags/Categorias
+- 🚦 Rate limiting
+
+---
+
+Feito com ❤️ por Alisson Nascimento
+

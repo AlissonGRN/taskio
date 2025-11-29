@@ -2,7 +2,7 @@ name: CI - TaskIO Pipeline
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main", "master", "feature/**", "feat/**" ]
   pull_request:
     branches: [ "main", "master" ]
 

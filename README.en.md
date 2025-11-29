@@ -1,4 +1,5 @@
 # TaskIO
+![CI Pipeline](https://github.com/AlissonGRN/taskio/actions/workflows/ci.yml/badge.svg)
 
 🇧🇷 [Português](README.md) | [🇬🇧 English](README.en.md)
 
@@ -18,9 +19,10 @@ TaskIO is a backend application developed with **FastAPI** that provides complet
 - ✅ **Access Control**: Each user manages only their own tasks
 - ✅ **Pagination**: Listing with page/size and complete metadata
 - ✅ **Automated Tests**: Suite with pytest and pytest-asyncio
-- ✅ **Async Database**: SQLAlchemy async ready for production
-- ✅ **Secure Configuration**: Environment variables with Pydantic Settings
- - ✅ **Database Migrations**: Alembic for schema versioning
+- ✅ **Async Database**: SQLAlchemy async with PostgreSQL + SQLite
+- ✅ **Database Migrations**: Alembic for schema versioning
+- ✅ **Docker**: Containerization with docker-compose (PostgreSQL + App)
+- ✅ **CI/CD**: GitHub Actions with automated tests
 
 ---
 
@@ -45,23 +47,28 @@ TaskIO is a backend application developed with **FastAPI** that provides complet
 
 - **FastAPI** - High-performance web framework
 - **Pydantic v2** - Validation and configuration
-- **SQLAlchemy (Async)** - Asynchronous ORM
-- **Aiosqlite** - Asynchronous SQLite driver
+- **SQLAlchemy (Async)** - Asynchronous ORM with multi-database support
+- **PostgreSQL** - Production database (via docker-compose)
+- **Aiosqlite** - SQLite driver for development/tests
 - **FastAPI-Users** - Authentication and user management
+- **Alembic** - Database migration management
 - **Argon2-CFI** - Password hashing
 - **pytest** - Automated testing
-- **Uvicorn** - ASGI server
- - **Alembic** - Database migration management
-
----
+- **Docker** - Containerization (Dockerfile + docker-compose)
+- **GitHub Actions** - CI/CD pipeline
+- **Uvicorn** - ASGI server---
 
 ## 📂 Project Structure
 
 The project follows a layered architecture with clear separation of responsibilities:
 
 - **app/**: Main application with task and authentication modules
+- **alembic/**: Database migrations
 - **tests/**: Automated test suite with pytest
+- **.github/workflows/**: CI/CD Pipeline (GitHub Actions)
 - **main.py**: Application entry point
+- **Dockerfile**: Application image
+- **docker-compose.yml**: Orchestration (PostgreSQL + App)
 - **.env-exemple**: Configuration template
 - **requirements.txt**: Project dependencies
 
@@ -69,11 +76,46 @@ The project follows a layered architecture with clear separation of responsibili
 
 ## 🔧 Installation and Setup
 
-### Prerequisites
-- Python 3.11+
+### Option 1: With Docker (Recommended)
+
+**Prerequisites:**
+- Docker
+- Docker Compose
+
+**Steps:**
+
+1. Clone the repository:
+```bash
+git clone https://github.com/AlissonGRN/taskio.git
+cd taskio
+```
+
+2. Configure environment variables:
+```bash
+cp .env-exemple .env
+```
+
+3. Start the containers:
+```bash
+docker-compose up -d
+```
+
+4. Run migrations:
+```bash
+docker-compose exec web alembic upgrade head
+```
+
+The API will be available at `http://localhost:8000`
+
+---
+
+### Option 2: Local (Development)
+
+**Prerequisites:**
+- Python 3.12+
 - pip
 
-### Steps
+**Steps:**
 
 1. Clone the repository:
 ```bash
@@ -95,16 +137,12 @@ pip install -r requirements.txt
 4. Configure environment variables:
 ```bash
 cp .env-exemple .env
-# Edit .env with SECRET_KEY and DATABASE_URL
+# Edit .env with SECRET_KEY and DATABASE_URL (SQLite or PostgreSQL)
 ```
 
-5. Run database migrations (Alembic):
+5. Run migrations:
 ```bash
-# Apply schema migrations to the database
 alembic upgrade head
-
-# (optional) Create a new migration after changing models:
-alembic revision --autogenerate -m "describe changes"
 ```
 
 6. Run the application:
@@ -162,8 +200,10 @@ Tests use in-memory database for isolation.
 - ✅ Pagination
 - ✅ Automated tests
 - ✅ Configuration with .env
-- 📋 PostgreSQL migration
-- 🐳 Docker + docker-compose
+- ✅ Database migrations with Alembic
+- ✅ Docker + docker-compose
+- ✅ PostgreSQL in production
+- ✅ CI/CD with GitHub Actions
 - 🔄 Refresh tokens
 - 📧 Email notifications
 - 🏷️ Tags/Categories
